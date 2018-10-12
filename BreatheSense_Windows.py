@@ -116,6 +116,154 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
     
     counter+=1
     gen_counter+=1
+	if(gen_counter==1):
+		print("Breathe Now")
+		
+	plt.scatter(counter,energy*10000000)
+	plt.pause(0.005)
+	
+	if(b_magnitude>20):
+		b_counter+=1      #The User is Breathing
+	
+	else:
+		nb_counter+=1     #The User is not Breathing 
+		
+	if(lb_counter+sb_counter>=5 or bn_counter>=2):    #when the morse inputs add up to 5 or the user stops breathing for 3 attempts then morse code checking and conversion takes place
+
+        print(msg_array)
+
+
+        if (findexact(msg_array,m_a)==1):    #checking for morse combination match and if true, text to speech speaks the correponding english alphabet
+
+            print('Hi')
+            #os.system("espeak 'Hi'")        #If you want the computer to speak it out loud 
+           
+        elif (findexact(msg_array,m_b)==1):
+            print('Name')
+            #os.system("espeak 'Name'")
+            
+
+        elif (findexact(msg_array,m_c)==1):
+            print('it')
+            #os.system("espeak 'it'")
+            
+
+        elif (findexact(msg_array,m_d)==1):
+            print('How')
+			
+		elif (findexact(msg_array,m_e)==1):
+            print('are')
+            
+        elif (findexact(msg_array,m_f)==1):
+            print('Food')
+           
+        elif (findexact(msg_array,m_g)==1):
+            print('you')
+            
+        elif (findexact(msg_array,m_h)==1):
+            print('is')
+            
+        elif (findexact(msg_array,m_i)==1):
+            print('need')
+           
+        elif (findexact(msg_array,m_j)==1):
+            print('this')
+           
+        elif (findexact(msg_array,m_k)==1):
+            print('work')
+            
+        elif (findexact(msg_array,m_l)==1):
+            print('help')
+
+        elif (findexact(msg_array,m_m)==1):
+            print('problem')
+            
+        elif (findexact(msg_array,m_n)==1):
+            print('me')
+            
+        elif (findexact(msg_array,m_o)==1):
+            print('Other')
+            
+        elif (findexact(msg_array,m_p)==1):
+            print('Please')
+           
+        elif (findexact(msg_array,m_q)==1):
+            print('Thanks')
+           
+        elif (findexact(msg_array,m_r)==1):
+            print('Right')
+
+        elif (findexact(msg_array,m_s)==1):
+            print('Stand')
+           
+        elif (findexact(msg_array,m_t)==1):
+            print('Talk')
+           
+        elif (findexact(msg_array,m_u)==1):
+            print('good')
+          
+        elif (findexact(msg_array,m_v)==1):
+            print('bad')
+           
+        elif (findexact(msg_array,m_w)==1):
+            print('look')
+           
+        elif (findexact(msg_array,m_x)==1):
+            print('Dhairya')
+           
+        elif (findexact(msg_array,m_y)==1):
+            print('I')
+         
+        elif (findexact(msg_array,m_z)==1):
+            print('Want') 
+			
+        else:    #if no match found
+            print('Not valid morse combination')
+
+        
+		clear_ar()
+        msg_counter=0
+        lb_counter=0
+        sb_counter=0
+        bn_counter=0
+   
+    if(gen_counter==20):    #taking 20 'energy' values to classify into 'long' and 'short' breaths
+
+        if(b_counter>0 and nb_counter>0):
+
+
+            if(b_counter>nb_counter):     #if energy magnitude is 'high' most the time among the 15 readings, then it is a 'long breath'
+
+                print('Long Breath')
+                lb_counter+=1
+
+                if(list_counter==0):    #appending '-' or 'dash' into msg_array when long breath is detected
+                    msg_array.append('-')
+                    msg_counter+=1
+                else:
+                    msg_array = [x + dash for x in msg_array]    #concatination of '-'
+
+
+            else:    #when energy magnitude is 'low' most the time among the 15 readings, then it is a 'short breath'
+                print('Short Breath')
+                sb_counter+=1
+
+                if(list_counter==0):    #appending '.' or 'dot' into msg_array when long breath is detected
+                    msg_array.append('.')
+                    msg_counter+=1
+                else:
+                    msg_array = [x + dot for x in msg_array]    #concatination of '.'
+
+
+        if(b_counter==0):
+            bn_counter+=1
+
+
+        gen_counter=0
+
+        b_counter=0
+        nb_counter=0			
+		
 	
 def BreathingApp():
     # Walabot_SetArenaR - input parameters
