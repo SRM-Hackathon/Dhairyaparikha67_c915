@@ -28,7 +28,7 @@ wlbt.Init()
 plt.axis([0,1000,0,100]) #pyplot function for defining axis limits in order (xmin, xmax, ymin, ymax)
 plt.ion()   #enabling interactive plotting making graph visualization easier.
 
-count = 0
+counter = 0
 b_magnitude = 0
 b_counter = 0
 nb_counter = 0
@@ -36,26 +36,54 @@ gen_counter = 0
 lb_counter = 0
 sb_counter = 0
 i = 0
-bn_counter = 0    #Breath Stop Detection
+bn_counter=0
+list_counter = 0    #a counter created to keep track of list input index
+
+msg_counter = 0
+wrd_counter = 0
+
+
 
 msg_array = []    #an unsized list created to store 'dots' & 'dashes'
 wrd_array = []    #an unsized list created to store english alphabets
 
+def findexact(msg_array,morse):    #a function that checks if content of msg_array and morse are an exact match
+    i=0
+    while i < len(msg_array):
+        if any(item == msg_array[i] for item in morse):
+            return 1
+        i+=1
 
-def BreatheSense(energy):    #the main function in BreatheSense where the breath detection,conversion to morse code and speech output takes place
+def findexactword(wrd_array,word):    #a function that checks if content of wrd_array and word are an exact match
+    j=0
+    #print('Inside Find Exact Word')
+    while j < len(wrd_array):
+        if any(items == wrd_array[j] for items in word):
+            return 1
+        j+=1
+
+#functions to clear msg & word lists
+def clear_ar():
+    del msg_array[:]
+
+
+def clear_wrdar():
+    del wrd_array[:]
+
+def BreatheSense(energy):    #the main function in walabreathe where the breath detection,conversion to morse code and speech output takes place
 
     global counter
     global b_magnitude
-    global b_counter      #Counter which increments when the user is breathing
-    global nb_counter     #Counter which increments when user is not breathing
-    global gen_counter    #general counter which increments in either case
-    global lb_counter     #Counter which increments when a Long Breathe is detected
-    global sb_counter	  #Counter which increments when a Short Breathe is detected
-    global msg_array      #Array which stores the morse code message
-	global wrd_array      #Array which stores the corresponding words to the messages
+    global b_counter
+    global nb_counter
+    global gen_counter
+    global lb_counter
+    global sb_counter
+    global msg_array
+    global msg_counter
+    global bn_counter
+    global list_counter
 
-#Shown Below is the message sheet with 26 words	
-#-----------------------------------------------------------------------------------------		
     dash = '-'
     dot = '.'
     m_a = ['.-']
@@ -110,25 +138,32 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
     l_x = 'DHAIRYA'
     l_y = 'I'
     l_z = 'WANT'
-#----------------------------------------------------------------------------------------------
+
+
+
+
+
     system('cls' if platform == 'win32' else 'clear')
     b_magnitude = energy*10000000
     
     counter+=1
     gen_counter+=1
-	if(gen_counter==1):
-		print("Breathe Now")
-		
-	plt.scatter(counter,energy*10000000)
-	plt.pause(0.005)
-	
-	if(b_magnitude>20):
-		b_counter+=1      #The User is Breathing
-	
-	else:
-		nb_counter+=1     #The User is not Breathing 
-		
-	if(lb_counter+sb_counter>=5 or bn_counter>=2):    #when the morse inputs add up to 5 or the user stops breathing for 3 attempts then morse code checking and conversion takes place
+    if(gen_counter==1):    #prompting user to breathe after previous breath has ended
+        print('Breathe Now')
+
+   
+    plt.scatter(counter,energy*10000000)    #pyplot function that allows us to scatter plot breathing 'energy' values
+    plt.pause(0.005)
+    if b_magnitude>20:    #user is breathing
+
+        b_counter+=1
+                
+
+    else:    #not breathing
+
+        nb_counter+=1
+        
+    if(lb_counter+sb_counter>=5 or bn_counter>=2):    #when the morse inputs add up to 5 or the user stops breathing for 3 attempts then morse code checking and conversion takes place
 
         print(msg_array)
 
@@ -138,6 +173,8 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
             print('Hi')
             #os.system("espeak 'Hi'")        #If you want the computer to speak it out loud 
            
+
+
         elif (findexact(msg_array,m_b)==1):
             print('Name')
             #os.system("espeak 'Name'")
@@ -150,8 +187,9 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
 
         elif (findexact(msg_array,m_d)==1):
             print('How')
-			
-		elif (findexact(msg_array,m_e)==1):
+           
+
+        elif (findexact(msg_array,m_e)==1):
             print('are')
             
         elif (findexact(msg_array,m_f)==1):
@@ -220,13 +258,17 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
         else:    #if no match found
             print('Not valid morse combination')
 
-        
         clear_ar()
+        pt_counter=0
+        msg_counter=0
         lb_counter=0
         sb_counter=0
         bn_counter=0
-   
-    if(gen_counter==20):    #taking 20 'energy' values to classify into 'long' and 'short' breaths
+        list_counter=0
+
+
+
+    if(gen_counter==20):    #taking 15 'energy' values to classify into 'long' and 'short' breaths
 
         if(b_counter>0 and nb_counter>0):
 
@@ -242,6 +284,7 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
                 else:
                     msg_array = [x + dash for x in msg_array]    #concatination of '-'
 
+                list_counter+=1
 
             else:    #when energy magnitude is 'low' most the time among the 15 readings, then it is a 'short breath'
                 print('Short Breath')
@@ -253,6 +296,7 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
                 else:
                     msg_array = [x + dot for x in msg_array]    #concatination of '.'
 
+                list_counter+=1
 
         if(b_counter==0):
             bn_counter+=1
@@ -261,18 +305,23 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
         gen_counter=0
 
         b_counter=0
-        nb_counter=0			
-		
-	
+        nb_counter=0
+
+
+
+
+
+
+
 def BreathingApp():
     # Walabot_SetArenaR - input parameters
-    minInCm, maxInCm, resInCm = 20, 80, 1
+    minInCm, maxInCm, resInCm = 30, 150, 1
     # Walabot_SetArenaTheta - input parameters
     minIndegrees, maxIndegrees, resIndegrees = -4, 4, 2
     # Walabot_SetArenaPhi - input parameters
     minPhiInDegrees, maxPhiInDegrees, resPhiInDegrees = -4, 4, 2
-    # Initializes walabot lib
-    wlbt.Initialize()
+    # Configure Walabot database install location (for windows)
+    wlbt.SetSettingsFolder()
     # 1) Connect : Establish communication with walabot.
     wlbt.ConnectAny()
     # 2) Configure: Set scan profile and arena
@@ -297,8 +346,9 @@ def BreathingApp():
         wlbt.Trigger()
         # 6) Get action: retrieve the last completed triggered recording
         energy = wlbt.GetImageEnergy()
+
         BreatheSense(energy)
-		# 7) Stop and Disconnect.
+    # 7) Stop and Disconnect.
     wlbt.Stop()
     wlbt.Disconnect()
     print('Terminate successfully')
