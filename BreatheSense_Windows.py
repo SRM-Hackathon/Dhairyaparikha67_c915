@@ -46,14 +46,16 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
 
     global counter
     global b_magnitude
-    global b_counter
-    global nb_counter
-    global gen_counter
-    global lb_counter
-    global sb_counter
-    global msg_array
-	global wrd_array
+    global b_counter      #Counter which increments when the user is breathing
+    global nb_counter     #Counter which increments when user is not breathing
+    global gen_counter    #general counter which increments in either case
+    global lb_counter     #Counter which increments when a Long Breathe is detected
+    global sb_counter	  #Counter which increments when a Short Breathe is detected
+    global msg_array      #Array which stores the morse code message
+	global wrd_array      #Array which stores the corresponding words to the messages
 
+#Shown Below is the message sheet with 26 words	
+#-----------------------------------------------------------------------------------------		
     dash = '-'
     dot = '.'
     m_a = ['.-']
@@ -108,7 +110,7 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
     l_x = 'DHAIRYA'
     l_y = 'I'
     l_z = 'WANT'
-
+#----------------------------------------------------------------------------------------------
     system('cls' if platform == 'win32' else 'clear')
     b_magnitude = energy*10000000
     
