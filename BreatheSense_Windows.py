@@ -221,8 +221,7 @@ def BreatheSense(energy):    #the main function in BreatheSense where the breath
             print('Not valid morse combination')
 
         
-		clear_ar()
-        msg_counter=0
+        clear_ar()
         lb_counter=0
         sb_counter=0
         bn_counter=0
