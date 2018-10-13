@@ -13,6 +13,19 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import array
+import json
+import paho.mqtt.client as mqtt
+import sys
+
+
+mqttc = mqtt.Client("BreatheData", clean_session=False)
+mqttc.username_pw_set("zcvkuouj", "xUVwWu2tKS6q")
+mqttc.connect("m15.cloudmqtt.com", 14487, 60)
+
+mqtta = mqtt.Client("WordData", clean_session=False)
+mqtta.username_pw_set("jcoqhidi", "aLyForgmJkL_")
+mqtta.connect("m15.cloudmqtt.com", 16383, 60)
+
 #--------------------------------------------------------------------------------------------
 #walabot initialization to define the path of SDK for both windows and linux platforms
 #--------------------------------------------------------------------------------------------
@@ -86,59 +99,14 @@ def BreatheSense(energy):    #the main function in walabreathe where the breath 
 
     dash = '-'
     dot = '.'
-    m_a = ['.-']
-    m_b = ['-...']
-    m_c = ['-.-.']
-    m_d = ['-..']
-    m_e = ['.']
-    m_f = ['..-.']
-    m_g = ['--.']
-    m_h = ['....']
-    m_i = ['..']
-    m_j = ['.---']
-    m_k = ['-.-']
-    m_l = ['.-..']
-    m_m = ['--']
-    m_n = ['-.']
-    m_o = ['---']
-    m_p = ['.--.']
-    m_q = ['--.-']
-    m_r = ['.-.']
-    m_s = ['...']
-    m_t = ['-']
-    m_u = ['..-']
-    m_v = ['...-']
-    m_w = ['.--']
-    m_x = ['-..-']
-    m_y = ['-.--']
-    m_z = ['--..']
-    l_a = 'HI'
-    l_b = 'NAME'
-    l_c = 'IT'
-    l_d = 'HOW'
-    l_e = 'ARE'
-    l_f = 'FOOD'
-    l_g = 'YOU'
-    l_h = 'IS'
-    l_i = 'NEED'
-    l_j = 'THIS'
-    l_k = 'WORK'
-    l_l = 'HELP'
-    l_m = 'PROBLEM'
-    l_n = 'ME'
-    l_o = 'OTHER'
-    l_p = 'PLEASE'
-    l_q = 'THANKS'
-    l_r = 'RIGHT'
-    l_s = 'STAND'
-    l_t = 'TALK'
-    l_u = 'GOOD'
-    l_v = 'BAD'
-    l_w = 'LOOK'
-    l_x = 'DHAIRYA'
-    l_y = 'I'
-    l_z = 'WANT'
-
+    m_a = ['..']
+    m_b = ['.-']
+    m_c = ['-.']
+    m_d = ['--']
+    l_a = 'Food Please'
+    l_b = 'Call for Medical Help!'
+    l_c = 'Let me through.'
+    l_d = 'Hi! How are you?'
 
 
 
@@ -170,93 +138,33 @@ def BreatheSense(energy):    #the main function in walabreathe where the breath 
 
         if (findexact(msg_array,m_a)==1):    #checking for morse combination match and if true, text to speech speaks the correponding english alphabet
 
-            print('Hi')
-            #os.system("espeak 'Hi'")        #If you want the computer to speak it out loud 
+            print('Food Please')
+            #os.system("espeak 'Hi'")        #If you want the computer to speak it out loud
+            mqtta.publish("sensor/temp", payload='Food Please', qos=0)
            
 
 
         elif (findexact(msg_array,m_b)==1):
-            print('Name')
+            print('Call for Medical Help!')
             #os.system("espeak 'Name'")
+            mqtta.publish("sensor/temp", payload='Call for medical help.', qos=0)
             
 
         elif (findexact(msg_array,m_c)==1):
-            print('it')
+            print('Let me through Please.')
             #os.system("espeak 'it'")
+            mqtta.publish("sensor/temp", payload='Let me through please.', qos=0)
             
 
         elif (findexact(msg_array,m_d)==1):
-            print('How')
+            print('Hi! How are you?')
+            mqtta.publish("sensor/temp", payload='Hi! How are you?', qos=0)
            
-
-        elif (findexact(msg_array,m_e)==1):
-            print('are')
-            
-        elif (findexact(msg_array,m_f)==1):
-            print('Food')
-           
-        elif (findexact(msg_array,m_g)==1):
-            print('you')
-            
-        elif (findexact(msg_array,m_h)==1):
-            print('is')
-            
-        elif (findexact(msg_array,m_i)==1):
-            print('need')
-           
-        elif (findexact(msg_array,m_j)==1):
-            print('this')
-           
-        elif (findexact(msg_array,m_k)==1):
-            print('work')
-            
-        elif (findexact(msg_array,m_l)==1):
-            print('help')
-
-        elif (findexact(msg_array,m_m)==1):
-            print('problem')
-            
-        elif (findexact(msg_array,m_n)==1):
-            print('me')
-            
-        elif (findexact(msg_array,m_o)==1):
-            print('Other')
-            
-        elif (findexact(msg_array,m_p)==1):
-            print('Please')
-           
-        elif (findexact(msg_array,m_q)==1):
-            print('Thanks')
-           
-        elif (findexact(msg_array,m_r)==1):
-            print('Right')
-
-        elif (findexact(msg_array,m_s)==1):
-            print('Stand')
-           
-        elif (findexact(msg_array,m_t)==1):
-            print('Talk')
-           
-        elif (findexact(msg_array,m_u)==1):
-            print('good')
-          
-        elif (findexact(msg_array,m_v)==1):
-            print('bad')
-           
-        elif (findexact(msg_array,m_w)==1):
-            print('look')
-           
-        elif (findexact(msg_array,m_x)==1):
-            print('Dhairya')
-           
-        elif (findexact(msg_array,m_y)==1):
-            print('I')
-         
-        elif (findexact(msg_array,m_z)==1):
-            print('Want') 
+ 
 			
         else:    #if no match found
             print('Not valid morse combination')
+            mqtta.publish("sensor/temp", payload='No Valid Combination found', qos=0)
 
         clear_ar()
         pt_counter=0
@@ -346,7 +254,7 @@ def BreathingApp():
         wlbt.Trigger()
         # 6) Get action: retrieve the last completed triggered recording
         energy = wlbt.GetImageEnergy()
-
+        mqttc.publish("sensor/temp", payload=energy*10000000, qos=0)
         BreatheSense(energy)
     # 7) Stop and Disconnect.
     wlbt.Stop()
