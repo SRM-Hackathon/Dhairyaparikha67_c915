@@ -23,6 +23,16 @@
         android:text="Here the Sentence will be displayed"
         android:textSize="25sp" />
 
+
+    <Button
+        android:id="@+id/button_speak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:background="@color/colorAccent"
+        android:text="Speak"
+        />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
@@ -30,4 +40,5 @@
         android:layout_marginTop="150dp"
         android:onClick="Developer"
         android:text="Switch to Developer Mode" />
+
 </LinearLayout>
