@@ -14,11 +14,6 @@ I am using the Walabot Sensor along with a Raspberry Pi for this purpose. I will
 
 # For The Event:
 
-The following files are included in this repo at present:
+The Git Repo contains 2 folders, one which contains the android components of the project and the other one contains the python components of the project. 
 
-1. The API application python file with the Walabot BreatheSensing Api use Demo
-2. A python file showing how to plot the energy values using matplotlib (complete)
-3. The Final Project Python File For windows(Complete, currently tweaking for perfection)
-4. BreatheDataSend: it sends the obtained energy values to a MQTT client
-
-Will be updating the files every 40-50 minutes.
+The Project will analyse the Sensor output, create a word output of its own and send it to the android app for viewing by using MQTT Protocol.  
