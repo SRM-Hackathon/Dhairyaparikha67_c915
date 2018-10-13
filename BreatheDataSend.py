@@ -28,14 +28,7 @@ elif platform.startswith('linux'):
 wlbt = load_source('WalabotAPI', modulePath)
 wlbt.Init()
 
-class master:
-
-    def pub(self,energy):
-        system('cls' if platform == 'win32' else 'clear')          
-        mqttc.publish("sensor/data", payload=energy*10000000, qos=0)
         
-class_instance = master()
-    
 def BreathingApp():
     # Walabot_SetArenaR - input parameters
     minInCm, maxInCm, resInCm = 20, 80, 1
@@ -70,8 +63,8 @@ def BreathingApp():
         # 6) Get action: retrieve the last completed triggered recording
         energy = wlbt.GetImageEnergy()
         # PrintBreathingEnergy(energy)
-        class_instance.pub(energy)
-        time.sleep(1)
+        mqttc.publish("sensor/temp", payload=energy*10000000, qos=0)
+        time.sleep(2)
         
             
     # 7) Stop and Disconnect.
